@@ -1,13 +1,9 @@
-FROM node:alpine
-
+FROM node:alpine as builder
 WORKDIR /app
-
 COPY package.json .
-RUN npm config set unsafe-perm true
-RUN npm install --force
+RUN npm install
 COPY . .
+RUN npm run build
 
-RUN chown -R node /app/node_modules
-USER node
-
-CMD ["npm", "start"]
+FROM nginx
+COPY --from=builder /app/build /usr/share/nginx/html
