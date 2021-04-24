@@ -7,7 +7,18 @@ services:
     restart: unless-stopped
     ports:
       - 9999:3000
+    volumes:
+      - /app/node_modules
+      - .:/app
     command: [ "npm", "start" ]
+  react-app-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: [ "npm", "test" ]
 networks:
   default:
     external:
